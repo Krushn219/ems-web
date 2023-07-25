@@ -1,0 +1,17 @@
+/* AdminPresenceTable.css */
+
+/* Style for the button */
+.custom-button {
+    padding: 10px 20px;
+    border: none;
+    background: linear-gradient(45deg, #00ffcc, #33ccff);
+    color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Add hover effect */
+.custom-button:hover {
+    background: linear-gradient(45deg, #33ccff, #00ffcc);
+}

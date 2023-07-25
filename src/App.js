@@ -167,7 +167,6 @@ class App extends Component {
   }
   handleSubmit = (event) => {
     event.preventDefault();
-    // console.log("id", event.target[0].value);
     this.setState({ pass: true });
     this.setState({ loading: true });
     this.login(event.target[0].value, event.target[1].value);
@@ -179,31 +178,21 @@ class App extends Component {
     this.componentDidMount();
   };
   login = (id, pass) => {
-    // history.push('new/path/here/');
-
-    // history.push('/page');
-    // History.push('/page');
-    // this.context.history.push('/path');
-
-    //email=admin@fenil.com&password=admin
-
     let bodyLogin = {
       email: id,
       password: pass,
     };
-    // let bodyLogin ="email="+id+"&password="+pass;
-    // {Email: id, Password: pass}
-    
-    // .post(process.env.REACT_APP_API_URL + "/api/login", bodyLogin)
+
     axios
-    .post("https://ems-back.vercel.app/" + "api/login", bodyLogin)
+      .post("https://ems-back.vercel.app/" + "api/login", bodyLogin)
+      // .post(process.env.REACT_APP_API_URL + "/api/login", bodyLogin)
       .then((res) => {
         console.log(jwt.decode(res.data));
         var decodedData = jwt.decode(res.data);
         localStorage.setItem("token", res.data);
 
         if (
-          (res == undefined ||
+          (res === undefined ||
             res == null ||
             decodedData.Account == undefined ||
             decodedData.Account == null) &&
@@ -277,24 +266,6 @@ class App extends Component {
             history.push("#/employee/" + decodedData._id + "/personal-info");
           }
         }
-
-        //  console.log(decodedData);
-        //  console.log(`decodedData.toString()=="false" `,decodedData.toString()=="false" );
-
-        //  if(decodedData.toString()=="false")
-
-        //  { console.log("1");
-        //  this.setState({ pass: false })
-        //  this.setState({ loading: false }); ;
-
-        // }else{
-        //   console.log("2");
-        //   this.setState({ pass: true });
-        //  this.setState({ loading: false });
-        //  this.setState({ data: decodedData});
-        //  this.setState({ isLogin: true });
-
-        // }
       })
       .catch((err) => {
         console.log(err);

@@ -32,6 +32,7 @@ import {
   faArchway,
 } from "@fortawesome/free-solid-svg-icons";
 import history from "../../history";
+import Present from "../Present";
 
 function RoleHRF() {
   return <Role />;
@@ -60,6 +61,9 @@ function EmployeeF() {
 }
 function SalaryF() {
   return <Salary />;
+}
+function PresentF() {
+  return <Present />;
 }
 function LeaveApplicationHRF() {
   return <LeaveApplicationHR />;
@@ -141,6 +145,15 @@ class DashboardHR extends Component {
                   </Link>
                 </li>
                 <li>
+                  <Link to="/hr/present">
+                    <FontAwesomeIcon
+                      icon={faRupeeSign}
+                      className="sidebar-icon"
+                    />
+                    Presence
+                  </Link>
+                </li>
+                {/* <li>
                   <Link to="/hr/leave-application-hr">
                     <FontAwesomeIcon
                       icon={faFileAlt}
@@ -202,7 +215,7 @@ class DashboardHR extends Component {
                     />
                     City
                   </Link>
-                </li>
+                </li> */}
                 <li></li>
                 {/* <li> <a href=""><FontAwesomeIcon icon={faChair} className="sidebar-icon"/> Position</a>   </li> */}
                 {/* <li> <a href=""><FontAwesomeIcon icon={faBuilding} className="sidebar-icon"/> Department</a>   </li> */}
@@ -218,6 +231,7 @@ class DashboardHR extends Component {
               <Switch>
                 <Route path="/hr/employee" exact component={EmployeeF} />
                 <Route path="/hr/salary" exact component={SalaryF} />
+                <Route path="/hr/present" exact component={PresentF} />
                 <Route path="/hr/company" exact component={CompanyF} />
                 <Route path="/hr/role" component={RoleHRF} />
                 {/* <Route path="/hr/role/form" exact component={RoleFormF} /> */}

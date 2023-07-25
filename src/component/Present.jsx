@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import "./Salary.css";
 import axios from "axios";
-import SalaryTable from "./SalaryTable.jsx";
-import SalaryForm from "./SalaryForm.jsx";
 import SalaryFormEdit from "./SalaryFormEdit.jsx";
 import { Route } from "react-router-dom";
-class Salary extends Component {
+import PresenceTable from "./PresenceTable";
+import SalaryForm from "./SalaryForm";
+class Present extends Component {
   state = {
     table: true,
     editForm: false,
@@ -16,7 +16,7 @@ class Salary extends Component {
       <>
         <Route
           exact
-          path="/hr/salary"
+          path="/hr/present"
           render={(props) => (
             <React.Fragment>
               {this.state.table ? (
@@ -28,7 +28,7 @@ class Salary extends Component {
                     onGenderChange={this.handleEditFormGenderChange}
                   />
                 ) : (
-                  <SalaryTable
+                  <PresenceTable
                     onAddSalary={this.handleAddSalary}
                     onEditSalary={this.handleEditSalary}
                   />
@@ -113,23 +113,6 @@ class Salary extends Component {
       window.alert("The bank account number you entered does not match ");
     } else {
       let body = {
-        // Status:this.state.editFormStatus,
-
-        // DateOfJoining: { type: Date, required: true },
-        // TerminateDate: { type: Date },
-
-        // SalaryName: event.target[0].value,
-        // Address: event.target[1].value,
-        // CityID:event.target[4].value,
-        // PostalCode: event.target[5].value,
-        // Website: event.target[6].value,
-        // Email: event.target[7].value,
-        // ContactPerson: event.target[8].value,
-        // ContactNo: event.target[9].value,
-        // FaxNo: event.target[10].value,
-        // PanNo: event.target[11].value,
-        // GSTNo: event.target[12].value,
-        // CINNo: event.target[13].value,
         BasicSalary: newInfo.target[1].value,
         BankName: newInfo.target[2].value,
         AccountNo: newInfo.target[3].value,
@@ -163,4 +146,4 @@ class Salary extends Component {
   };
 }
 
-export default Salary;
+export default Present;
