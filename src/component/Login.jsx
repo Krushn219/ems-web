@@ -3,6 +3,7 @@ import "./Login.css";
 import { css } from "@emotion/core";
 // First way to import
 import { ScaleLoader } from "react-spinners";
+import Logo from "../img/logon.png";
 const override = css`
   display: block;
   margin: 0 auto;
@@ -17,7 +18,7 @@ class Login extends Component {
         <div className="container">
           <div id="main-outer-div">
             <div id="logo-div">
-              {/* <img id="logo-img" src={Logo} alt="" /> */}
+              <img id="logo-img" src={Logo} alt="" />
             </div>
             <div id="title-div">
               <h4 className="title">Sign in</h4>
