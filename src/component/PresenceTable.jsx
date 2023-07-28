@@ -10,45 +10,54 @@ import "./PresenceTable.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+// const REACT_APP_API_URL = "http://localhost:4001";
+
 const AdminPresenceTable = () => {
   const [employees, setEmployees] = useState([]);
+  const [employeesPresence, setEmployeesPresence] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   useEffect(() => {
     fetchEmployees();
+    fetchEmployeesPresence();
+  }, []);
+
+  useEffect(() => {
+    // Check if the date has changed compared to the previous day
+    // If it has changed, reset the employeesPresence state to an empty array
+    const previousDate = new Date(selectedDate);
+    previousDate.setDate(previousDate.getDate() - 1);
+    if (
+      previousDate.toISOString().slice(0, 10) !==
+      selectedDate.toISOString().slice(0, 10)
+    ) {
+      setEmployeesPresence([]);
+    }
   }, [selectedDate]);
 
-  const fetchEmployees = () => {
+  const fetchEmployeesPresence = () => {
     // Make the axios call to fetch employees based on the selected date
     axios
-      .get(process.env.REACT_APP_API_URL + `/api/employee/all`)
+      // .get(process.env.REACT_APP_API_URL + `/api/employee/all`)
+      .get(process.env.REACT_APP_API_URL + `/api/employeePresence/date`)
       .then((response) => {
-        setEmployees(response.data.employee);
+        setEmployeesPresence(response.data.employeePresence);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const handleCreatePresentData = () => {
-    const formattedDate = selectedDate.toISOString().slice(0, 10);
-
+  const fetchEmployees = () => {
+    // Make the axios call to fetch employees based on the selected date
     axios
-      .post(
-        process.env.REACT_APP_API_URL + "/api/employeePresence/create",
-        { date: formattedDate },
-        {
-          headers: {
-            authorization: localStorage.getItem("token") || "",
-          },
-        }
-      )
+      // .get(process.env.REACT_APP_API_URL + `/api/employee/all`)
+      .get(process.env.REACT_APP_API_URL + `/api/employee/all`)
       .then((response) => {
-        console.log("Present data created successfully:", response.data);
-        fetchEmployees();
+        setEmployees(response.data.employee);
       })
       .catch((error) => {
-        console.log("Error creating present data:", error);
+        console.log(error);
       });
   };
 
@@ -65,12 +74,7 @@ const AdminPresenceTable = () => {
   };
 
   const createPresentData = (employeeId, name, workingHours, employee) => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const day = String(today.getDate()).padStart(2, "0");
-
-    const formattedToday = `${year}-${month}-${day}`;
+    const formattedToday = selectedDate.toISOString().slice(0, 10);
     // Check if the present data already exists for the employee and selected date
     const existingData = employees.find(
       (employee) =>
@@ -92,7 +96,6 @@ const AdminPresenceTable = () => {
       date: formattedToday, // Include the date information
       workingHours: workingHours,
     };
-
     axios
       .post(
         process.env.REACT_APP_API_URL + "/api/employeePresence/create",
@@ -105,42 +108,18 @@ const AdminPresenceTable = () => {
       )
       .then((response) => {
         fetchEmployees();
+        fetchEmployeesPresence();
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const saveEmployeeData = (employeeId, name, workingHours, isPresent) => {
-    // Call the API here to save the employee's present data
-    // Use the employeeId, name, workingHours, and isPresent values to construct the request body
-    // Make the POST request to the backend API to save the data
-    // Handle success and error responses accordingly
-    // For example:
-    axios
-      .post(
-        process.env.REACT_APP_API_URL + "/api/employeePresence/create",
-        {
-          EmployeeID: employeeId,
-          EmployeeName: name,
-          workingHours: workingHours,
-          present: isPresent,
-        },
-        {
-          headers: {
-            authorization: localStorage.getItem("token") || "",
-          },
-        }
-      )
-      .then((response) => {
-        console.log("Employee data saved successfully:", response.data);
-        // Optionally, you can show a success message or perform other actions
-      })
-      .catch((error) => {
-        console.log("Error saving employee data:", error);
-        // Optionally, you can show an error message or perform other actions
-      });
-  };
+  const isFutureDate = selectedDate > new Date();
+  // Filter the employeesPresence to get data for the selected date
+  const presentDataForSelectedDate = employeesPresence.filter(
+    (data) => data.date === selectedDate.toISOString().slice(0, 10)
+  );
 
   return (
     <div>
@@ -149,68 +128,77 @@ const AdminPresenceTable = () => {
         selected={selectedDate}
         onChange={(date) => setSelectedDate(date)}
       />
-      <button onClick={handleCreatePresentData}>Present Data</button>
-      <table border={1}>
-        <thead>
-          <tr>
-            <th>Employee Name</th>
-            <th>Working Hours</th>
-            <th>Present</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {employees.map((employee, index) => (
-            <tr key={employee._id}>
-              <td>{employee.FirstName}</td>
-              <td>
-                <input
-                  type="number"
-                  value={employee.workingHours || ""}
-                  onChange={(e) =>
-                    handleWorkingHoursChange(index, e.target.value)
-                  }
-                />
-              </td>
-              <td>
-                <FontAwesomeIcon
-                  icon={employee.present ? faCheckSquare : faSquare}
-                  onClick={() => handlePresentChange(index)}
-                />
-              </td>
-              <td>
-                <button
-                  className="custom-button"
-                  onClick={() =>
-                    createPresentData(
-                      employee._id,
-                      employee.FirstName,
-                      employee.workingHours,
-                      employee
-                    )
-                  }
-                >
-                  <FontAwesomeIcon icon={faCheck} />
-                </button>
-
-                {/* <button
-                  className="custom-button"
-                  onClick={() =>
-                    saveEmployeeData(
-                      employee._id,
-                      employee.FirstName,
-                      employee.workingHours,
-                      employee.present
-                    )
-                  }
-                >
-                  <FontAwesomeIcon icon={faCheck} />
-                </button> */}
-              </td>
+      <button onClick={fetchEmployeesPresence} disabled={isFutureDate}>
+        Present Data
+      </button>
+      {/* Conditionally render the table based on the selected date */}
+      {isFutureDate ? (
+        <p>Cannot view or modify data for future dates.</p>
+      ) : (
+        <table border={1}>
+          <thead>
+            <tr>
+              <th>Employee Name</th>
+              <th>Working Hours</th>
+              <th>Present</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {employees.map((employee, index) => {
+              const isPresent = presentDataForSelectedDate.find(
+                (data) => data.EmployeeID === employee._id
+              );
+              return (
+                <tr key={employee._id}>
+                  <td>{employee.FirstName}</td>
+                  <td>
+                    <input
+                      type="number"
+                      value={
+                        isPresent
+                          ? isPresent.workHours
+                          : employee.workingHours || ""
+                      }
+                      onChange={(e) =>
+                        handleWorkingHoursChange(index, e.target.value)
+                      }
+                    />
+                  </td>
+                  <td>
+                    <FontAwesomeIcon
+                      icon={
+                        isPresent?.present
+                          ? faCheckSquare
+                          : employee.present
+                          ? faCheckSquare
+                          : faSquare
+                      }
+                      onClick={() => handlePresentChange(index)}
+                    />
+                  </td>
+                  <td>
+                    <button
+                      className="custom-button"
+                      onClick={() => {
+                        createPresentData(
+                          employee._id,
+                          employee.FirstName,
+                          employee.workingHours,
+                          employee
+                        );
+                      }}
+                      disabled={isPresent}
+                    >
+                      <FontAwesomeIcon icon={faCheck} />
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };

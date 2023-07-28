@@ -44,27 +44,7 @@ class App extends Component {
       }
     );
   }
-  // alertFirstTime() {
-  //   if (this.state.firstTimeAlert && !this.state.isLogin) {
-  //     setTimeout(function () {
-  //       window.alert(
-  //         `To explore the feature of this application here is the temporary id and pass for all account
-  //     Admin:
-  //         id:admin@gmail.com
-  //         pass:admin
-  //     Hr:
-  //         id:hr@gmail.com
-  //         pass:hr
-  //     Employee:
-  //         id:emp@gmail.com
-  //         pass:emp
-  //     `
-  //       );
-  //     }, 500);
 
-  //     this.setState({ firstTimeAlert: false });
-  //   }
-  // }
   render() {
     return (
       // <div>{this.state.isLogin ? (
@@ -184,8 +164,8 @@ class App extends Component {
     };
 
     axios
-      .post("https://ems-back.vercel.app/" + "api/login", bodyLogin)
-      // .post(process.env.REACT_APP_API_URL + "/api/login", bodyLogin)
+      // .post("https://ems-back.vercel.app/" + "api/login", bodyLogin)
+      .post(process.env.REACT_APP_API_URL + "/api/login", bodyLogin)
       .then((res) => {
         console.log(jwt.decode(res.data));
         var decodedData = jwt.decode(res.data);
