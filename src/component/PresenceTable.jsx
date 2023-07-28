@@ -10,8 +10,6 @@ import "./PresenceTable.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-// const REACT_APP_API_URL = "http://localhost:4001";
-
 const AdminPresenceTable = () => {
   const [employees, setEmployees] = useState([]);
   const [employeesPresence, setEmployeesPresence] = useState([]);
@@ -124,6 +122,10 @@ const AdminPresenceTable = () => {
   return (
     <div>
       <h2>Employee Presence Details</h2>
+      {/* <DatePicker
+        selected={selectedDate}
+        onChange={(date) => setSelectedDate(date)}
+      /> */}
       <DatePicker
         selected={selectedDate}
         onChange={(date) => setSelectedDate(date)}
