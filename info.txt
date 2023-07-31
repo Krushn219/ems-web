@@ -1,0 +1,26 @@
+ "scripts": {
+    "dev": "react-scripts start",
+    "start": "react-scripts --openssl-legacy-provider start",
+    "build": "react-scripts --openssl-legacy-provider build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+
+Code With Antonio
+
+The caret symbol (^) in the version specifier allows npm to install any compatible minor or patch version of react-datepicker that is greater than or equal to 4.16.0 but does not include breaking changes.
+
+
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import { Router } from "react-router-dom";
+import history from "../src/history";
+
+ReactDOM.render(
+  <Router history={history}>
+    <App />
+  </Router>,
+  document.getElementById("root")
+);
